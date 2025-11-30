@@ -45,7 +45,7 @@ public class PlayerMovement : MonoBehaviour
         if(collision.gameObject.tag == "Ground")
         grounded = true;
     }
-        public bool canAttack()
+        public bool CanAttack()
     {
         // Player can attack only when grounded and not jumping
         return grounded;
