@@ -18128,7 +18128,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1073997678}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6f3d6b8b04d51e04fa7edb1f799074da, type: 3}
   m_Name: 
@@ -20842,6 +20842,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1271183720}
   - component: {fileID: 1271183721}
+  - component: {fileID: 1271183722}
   m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
@@ -20877,12 +20878,25 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271183719}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1a28b4a24dd820e4bb70f94f921948bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   parallaxSpeed: 0.05
+--- !u!114 &1271183722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1271183719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f3d6b8b04d51e04fa7edb1f799074da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 0
 --- !u!1001 &1274873690
 PrefabInstance:
   m_ObjectHideFlags: 0
