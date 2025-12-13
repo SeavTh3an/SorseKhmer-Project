@@ -9,39 +9,58 @@ public class MenuController : MonoBehaviour
 
     public Vector3 fireballOffset = new Vector3(-0.3f, 0f, 0f);
 
-    private int currentIndex = 0;
+    [Header("UI Panels")]
+    public GameObject menuPanel;         // MenuPanel reference
+    public GameObject instructionPanel;  // InstructionPanel reference
+
+    private int currentIndex = 0;        // Current menu selection
 
     void Start()
     {
+        // Initial state
+        menuPanel.SetActive(true);
+        instructionPanel.SetActive(false);
+
         UpdateFireballPosition();
     }
 
     void Update()
     {
-        // Move down
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        if (menuPanel.activeSelf)
         {
-            currentIndex++;
-            if (currentIndex >= menuPositions.Length)
-                currentIndex = 0;
+            // Navigate down
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                currentIndex++;
+                if (currentIndex >= menuPositions.Length)
+                    currentIndex = 0;
 
-            UpdateFireballPosition();
+                UpdateFireballPosition();
+            }
+
+            // Navigate up
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                currentIndex--;
+                if (currentIndex < 0)
+                    currentIndex = menuPositions.Length - 1;
+
+                UpdateFireballPosition();
+            }
+
+            // Confirm selection
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                SelectOption();
+            }
         }
-
-        // Move up
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        else if (instructionPanel.activeSelf)
         {
-            currentIndex--;
-            if (currentIndex < 0)
-                currentIndex = menuPositions.Length - 1;
-
-            UpdateFireballPosition();
-        }
-
-        // Confirm selection
-        if (Input.GetKeyDown(KeyCode.Return)) // Enter key
-        {
-            SelectOption();
+            // Close instructions on any click/tap
+            if (Input.GetMouseButtonDown(0))
+            {
+                CloseInstructions();
+            }
         }
     }
 
@@ -67,12 +86,26 @@ public class MenuController : MonoBehaviour
                 break;
 
             case 1: // HELP
-                Debug.Log("Help selected");
+                ShowInstructions();
                 break;
 
             case 2: // SETTING
                 Debug.Log("Setting selected");
                 break;
         }
+    }
+
+    void ShowInstructions()
+    {
+        menuPanel.SetActive(false);          // Hide menu buttons, player, enemy
+        instructionPanel.SetActive(true);    // Show instruction panel
+        // Fireball stays at last position (hidden behind menu panel)
+    }
+
+    void CloseInstructions()
+    {
+        instructionPanel.SetActive(false);   // Hide instructions
+        menuPanel.SetActive(true);           // Show menu again
+        UpdateFireballPosition();            // Ensure fireball appears at last selection
     }
 }
