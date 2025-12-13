@@ -2,13 +2,17 @@ using UnityEngine;
 
 public class EnemyMovement2D : MonoBehaviour
 {
-    public Transform player;      // Assign your player in Inspector
+    public Transform player;           // Assign your player in Inspector
+    public PlayerHealth playerHealth;  // Assign PlayerHealth script (for hearts)
     public float speed = 3f;
-    public float chaseRange = 5f;
+    public float chaseRange = 5f;      // Distance to start chasing
+    public float attackRange = 1.2f;   // Distance to trigger attack
+    public float attackCooldown = 1f;  // Time between attacks
 
     private Rigidbody2D rb;
     private Animator animator;
     private bool grounded;
+    private float lastAttackTime;
 
     void Awake()
     {
@@ -22,26 +26,36 @@ public class EnemyMovement2D : MonoBehaviour
 
         float distance = Vector2.Distance(transform.position, player.position);
 
-        if (distance < chaseRange && grounded)
+        // Move towards player if in chase range but outside attack range
+        if (distance < chaseRange && distance > attackRange && grounded)
         {
-            // Calculate direction to player
             float horizontalDirection = player.position.x - transform.position.x;
-
-            // Move horizontally only
             rb.velocity = new Vector2(Mathf.Sign(horizontalDirection) * speed, rb.velocity.y);
 
             // Flip enemy based on movement direction
-            if (rb.velocity.x > 0.01f)
-                transform.localScale = new Vector3(1, 1, 1);
-            else if (rb.velocity.x < -0.01f)
-                transform.localScale = new Vector3(-1, 1, 1);
+            transform.localScale = new Vector3(Mathf.Sign(horizontalDirection), 1, 1);
 
-            // Walking/running animation
-            animator.SetBool("run", Mathf.Abs(rb.velocity.x) > 0.01f);
+            animator.SetBool("run", true);
+        }
+        // Attack if within attack range
+        else if (distance <= attackRange && grounded)
+        {
+            rb.velocity = new Vector2(0, rb.velocity.y); // Stop moving
+            animator.SetBool("run", false);
+
+            if (Time.time - lastAttackTime >= attackCooldown)
+            {
+                animator.SetTrigger("EnemyAttack"); // Trigger attack animation
+                lastAttackTime = Time.time;
+
+                // Damage the player
+                if (playerHealth != null)
+                    playerHealth.TakeDamage(1);
+            }
         }
         else
         {
-            // Stop moving when player is out of range
+            // Idle if player is out of range
             rb.velocity = new Vector2(0, rb.velocity.y);
             animator.SetBool("run", false);
         }
@@ -49,7 +63,6 @@ public class EnemyMovement2D : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // Check if enemy is on the ground
         if (collision.gameObject.CompareTag("Ground"))
             grounded = true;
     }
