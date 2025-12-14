@@ -7,6 +7,9 @@ public class PlayerMovement : MonoBehaviour
     private Animator animation; 
     private bool grounded;
 
+    // Add this for typing mode
+    public bool canMove = true;
+
     private void Awake()
     {   
         body = GetComponent<Rigidbody2D>();
@@ -14,7 +17,9 @@ public class PlayerMovement : MonoBehaviour
     }
 
     private void Update()
-    {   
+    {
+        if (!canMove) return; // Stop movement while typing
+
         float horizontalInput = Input.GetAxis("Horizontal");
         body.velocity = new Vector2(horizontalInput * speed, body.velocity.y);
 
@@ -30,7 +35,7 @@ public class PlayerMovement : MonoBehaviour
 
         // Animation
         animation.SetBool("walk", horizontalInput != 0);
-        animation.SetBool("grounded",grounded);
+        animation.SetBool("grounded", grounded);
     }
 
     private void Jump()
@@ -43,11 +48,12 @@ public class PlayerMovement : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if(collision.gameObject.tag == "Ground")
-        grounded = true;
+            grounded = true;
     }
-        public bool CanAttack()
+
+    public bool CanAttack()
     {
-        // Player can attack only when grounded and not jumping
+        // Player can attack only when grounded
         return grounded;
     }
 }

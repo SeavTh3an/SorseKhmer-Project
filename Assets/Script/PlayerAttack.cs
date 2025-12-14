@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
 {
-    [SerializeField] private float attackCooldown;
-    [SerializeField] private Transform firePoint;
-    [SerializeField] private GameObject[] fireballs;
+    [SerializeField] private float attackCooldown = 0.5f;
+    [SerializeField] private Transform firePoint;         // Assign empty child
+    [SerializeField] private GameObject[] fireballs;      // Assign fireball prefabs
 
     private Animator anim;
-    private PlayerMovement playerMovement;
+    private PlayerMovement playerMovement;                // Optional
     private float cooldownTimer = Mathf.Infinity;
 
     private void Awake()
@@ -18,20 +18,37 @@ public class PlayerAttack : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButton(0) && cooldownTimer > attackCooldown && playerMovement.CanAttack())
-            Attack();
-
         cooldownTimer += Time.deltaTime;
     }
 
-    private void Attack()
+    // Called by TypingManager when full word typed
+    public void AttackEnemy(Transform enemy)
     {
-        anim.SetTrigger("attack");
+        if (cooldownTimer < attackCooldown) return;
+        if (playerMovement != null && !playerMovement.CanAttack()) return;
+
+        anim?.SetTrigger("attack");
         cooldownTimer = 0;
 
-        fireballs[FindFireball()].transform.position = firePoint.position;
-        fireballs[FindFireball()].GetComponent<Projectile>().SetDirection(Mathf.Sign(transform.localScale.x));
+        if (fireballs.Length == 0 || firePoint == null)
+        {
+            Debug.LogError("Fireballs array or FirePoint not assigned!");
+            return;
+        }
+
+        GameObject fireball = fireballs[FindFireball()];
+        fireball.transform.position = firePoint.position;
+
+        Projectile proj = fireball.GetComponent<Projectile>();
+        if (proj == null)
+        {
+            Debug.LogError("Projectile component missing on fireball prefab!");
+            return;
+        }
+
+        proj.SetTarget(enemy);
     }
+
     private int FindFireball()
     {
         for (int i = 0; i < fireballs.Length; i++)

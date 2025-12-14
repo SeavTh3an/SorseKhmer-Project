@@ -3,8 +3,8 @@ using TMPro;
 
 public class EnemyTyping : MonoBehaviour
 {
-    public TMP_Text wordText;          // Drag your WordText TMP here
-    public string[] possibleWords;     // Khmer word list
+    public TMP_Text wordText;          // Assign TMP Text
+    public string[] possibleWords;     // Khmer or English word list
     private string currentWord;
     private int currentCharIndex = 0;
 
@@ -25,8 +25,7 @@ public class EnemyTyping : MonoBehaviour
     // Called by TypingManager for each typed letter
     public bool TypeLetter(char letter)
     {
-        if (currentCharIndex >= currentWord.Length)
-            return false;
+        if (currentCharIndex >= currentWord.Length) return false;
 
         if (letter == currentWord[currentCharIndex])
         {
@@ -35,8 +34,7 @@ public class EnemyTyping : MonoBehaviour
 
             if (currentCharIndex >= currentWord.Length)
             {
-                DefeatEnemy();
-                return true;
+                return true; // Word completed
             }
         }
         return false;
@@ -44,13 +42,13 @@ public class EnemyTyping : MonoBehaviour
 
     void UpdateWordDisplay()
     {
-        // Green typed letters + remaining white letters
         string typed = "<color=green>" + currentWord.Substring(0, currentCharIndex) + "</color>";
         string remaining = currentWord.Substring(currentCharIndex);
         wordText.text = typed + remaining;
     }
 
-    void DefeatEnemy()
+    // Called when projectile hits the enemy
+    public void OnHitByFireball()
     {
         // Optional: play death animation here
         Destroy(gameObject);

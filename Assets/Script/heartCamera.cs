@@ -2,13 +2,17 @@ using UnityEngine;
 
 public class HeartFollowCamera2D : MonoBehaviour
 {
-    public Vector2 screenOffset = new Vector2(50, -50); // Pixels from top-left corner
     private Camera mainCamera;
+    private Vector3 offset;
     private Vector3 initialScale;
 
     void Start()
     {
         mainCamera = Camera.main;
+
+        // Save initial offset between heart and camera
+        offset = transform.position - mainCamera.transform.position;
+
         initialScale = transform.localScale;
     }
 
@@ -16,13 +20,10 @@ public class HeartFollowCamera2D : MonoBehaviour
     {
         if (mainCamera == null) return;
 
-        // Convert screen position to world position
-        Vector3 screenPos = new Vector3(screenOffset.x, Screen.height + screenOffset.y, mainCamera.nearClipPlane + 1f);
-        Vector3 worldPos = mainCamera.ScreenToWorldPoint(screenPos);
+        // Follow camera automatically
+        transform.position = mainCamera.transform.position + offset;
 
-        transform.position = worldPos;
-
-        // Keep original scale (so hearts don’t stretch when camera moves)
+        // Keep original scale
         transform.localScale = initialScale;
     }
 }
