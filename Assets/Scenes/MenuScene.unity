@@ -1415,7 +1415,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: SETTING
+  m_text: QUITE
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d5e68549d5575b840ab07431f1c4da2d, type: 2}
   m_sharedMaterial: {fileID: 7089536417784722881, guid: d5e68549d5575b840ab07431f1c4da2d, type: 2}
@@ -6472,7 +6472,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f3d6b8b04d51e04fa7edb1f799074da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0.09
+  speed: 0.045
 --- !u!23 &152999723
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -6569,7 +6569,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f3d6b8b04d51e04fa7edb1f799074da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0.07
+  speed: 0.035
 --- !u!23 &159380106
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -12500,6 +12500,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
+  canMove: 1
 --- !u!50 &660247878
 Rigidbody2D:
   serializedVersion: 4
@@ -13440,7 +13441,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f3d6b8b04d51e04fa7edb1f799074da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0.06
+  speed: 0.03
 --- !u!23 &735497049
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -16963,8 +16964,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 660247873}
+  playerHealth: {fileID: 0}
   speed: 3
   chaseRange: 20
+  attackRange: 1.2
+  attackCooldown: 1
 --- !u!50 &978923005
 Rigidbody2D:
   serializedVersion: 4
@@ -18261,7 +18265,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f3d6b8b04d51e04fa7edb1f799074da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0.02
+  speed: 0.01
 --- !u!23 &1037668244
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -18610,7 +18614,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f3d6b8b04d51e04fa7edb1f799074da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0.04
+  speed: 0.02
 --- !u!23 &1073997681
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -22207,7 +22211,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f3d6b8b04d51e04fa7edb1f799074da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0.101
+  speed: 0.055
 --- !u!23 &1321516888
 MeshRenderer:
   m_ObjectHideFlags: 0
