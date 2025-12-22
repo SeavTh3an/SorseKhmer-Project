@@ -49,7 +49,8 @@ public class EnemyTyping : MonoBehaviour
 
     // Called when projectile hits the enemy
     public void OnHitByFireball()
-    {
+    {   
+        EnemyManager.Instance.EnemyDied();
         // Optional: play death animation here
         Destroy(gameObject);
     }
