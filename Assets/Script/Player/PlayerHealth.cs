@@ -3,14 +3,16 @@ using System.Collections;
 
 public class PlayerHealth : MonoBehaviour
 {
+    [Header("Health UI")]
     public SpriteRenderer[] hearts;       // Assign 3 heart SpriteRenderers
     public Sprite heartFull;              // Normal heart
     public Sprite heartBroken;            // Broken heart
     public int maxHealth = 3;
     private int currentHealth;
 
+    [Header("Player")]
     public Animator animator;             // Assign Player Animator
-    public float disappearDelay = 1.5f;  // Time before player disappears after death
+    public float disappearDelay = 1.5f;  // Time before player disappears
 
     [Header("Game Over")]
     public GameObject gameOverPanel;      // Assign your Game Over Panel here
@@ -48,18 +50,27 @@ public class PlayerHealth : MonoBehaviour
 
     IEnumerator Die()
     {
-        // Play death animation
+        // 1️⃣ Play death animation
         if (animator != null)
             animator.SetTrigger("die");
 
-        // Wait for disappear delay
+        // 2️⃣ Play die sound & stop background music
+        if (SoundManager.Instance != null)
+            SoundManager.Instance.PlayDie();
+
+        // 3️⃣ Wait for disappear delay
         yield return new WaitForSeconds(disappearDelay);
 
-        // Hide player
+        // 4️⃣ Hide player
         gameObject.SetActive(false);
 
-        // Show Game Over panel
+        // 5️⃣ Show Game Over panel
         if (gameOverPanel != null)
+        {
             gameOverPanel.SetActive(true);
+
+            // Optional: pause game
+            Time.timeScale = 0f;
+        }
     }
 }

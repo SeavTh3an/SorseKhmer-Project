@@ -69,6 +69,7 @@ public class GameOverMenuController : MonoBehaviour
 
     void SelectOption()
     {
+        Time.timeScale = 1f;
         switch (currentIndex)
         {
             case 0: // RESTART

@@ -9,65 +9,64 @@ public class WinMenuController : MonoBehaviour
     public Vector3 fireballOffset = new Vector3(-0.3f, 0f, 0f);
 
     [Header("UI Panels")]
-    public GameObject winPanel; // Panel that shows when player wins
+    public GameObject winPanel;
 
     private int currentIndex = 0;
 
     void Start()
     {
-        winPanel.SetActive(false); // Initially hidden
+        if (winPanel != null)
+            winPanel.SetActive(false);
     }
 
     void Update()
     {
-        if (winPanel.activeSelf)
+        if (winPanel != null && winPanel.activeSelf)
         {
-            // Navigate down
             if (Input.GetKeyDown(KeyCode.DownArrow))
             {
-                currentIndex++;
-                if (currentIndex >= menuPositions.Length)
-                    currentIndex = 0;
-
+                currentIndex = (currentIndex + 1) % menuPositions.Length;
                 UpdateFireballPosition();
             }
 
-            // Navigate up
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
                 currentIndex--;
-                if (currentIndex < 0)
-                    currentIndex = menuPositions.Length - 1;
-
+                if (currentIndex < 0) currentIndex = menuPositions.Length - 1;
                 UpdateFireballPosition();
             }
 
-            // Confirm selection
             if (Input.GetKeyDown(KeyCode.Return))
-            {
                 SelectOption();
-            }
         }
     }
 
-    public void ShowWinMenuWithDelay(float delay = 3f)
+    public void ShowWinMenuWithDelay(float delay = 0.5f)
     {
         StartCoroutine(ShowWinMenuCoroutine(delay));
     }
 
     private IEnumerator ShowWinMenuCoroutine(float delay)
     {
-        yield return new WaitForSeconds(delay);
-        Time.timeScale = 0f; // Pause game
-        winPanel.SetActive(true);
+        yield return new WaitForSecondsRealtime(delay); // unaffected by Time.timeScale
+
+        Time.timeScale = 0f; // pause game
+        if (winPanel != null)
+            winPanel.SetActive(true);
+
         currentIndex = 0;
         UpdateFireballPosition();
+
+        // Play win sound (background music stops in SoundManager)
+        if (SoundManager.Instance != null)
+            SoundManager.Instance.PlayWin();
     }
 
     void UpdateFireballPosition()
     {
-        RectTransform target = menuPositions[currentIndex];
+        if (fireball == null || menuPositions.Length == 0) return;
 
+        RectTransform target = menuPositions[currentIndex];
         float leftEdgeX = target.position.x - (target.rect.width * target.lossyScale.x) / 2f;
 
         Vector3 newPos = fireball.position;
@@ -79,8 +78,7 @@ public class WinMenuController : MonoBehaviour
 
     void SelectOption()
     {
-        // Reset Time.timeScale before loading new scene
-        Time.timeScale = 1f;
+        Time.timeScale = 1f; // resume time
 
         switch (currentIndex)
         {
@@ -94,7 +92,6 @@ public class WinMenuController : MonoBehaviour
 
             case 2: // QUIT
                 Application.Quit();
-                Debug.Log("Quit game");
                 break;
         }
     }
