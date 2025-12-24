@@ -3,11 +3,11 @@ using UnityEngine;
 public class PlayerAttack : MonoBehaviour
 {
     [SerializeField] private float attackCooldown = 0.5f;
-    [SerializeField] private Transform firePoint;         // Assign empty child
-    [SerializeField] private GameObject[] fireballs;      // Assign fireball prefabs
+    [SerializeField] private Transform firePoint;
+    [SerializeField] private GameObject[] fireballs;
 
     private Animator anim;
-    private PlayerMovement playerMovement;                // Optional
+    private PlayerMovement playerMovement;
     private float cooldownTimer = Mathf.Infinity;
 
     private void Awake()
@@ -21,28 +21,35 @@ public class PlayerAttack : MonoBehaviour
         cooldownTimer += Time.deltaTime;
     }
 
-    // Called by TypingManager when full word typed
+    // Called by TypingManager
     public void AttackEnemy(Transform enemy)
     {
         if (cooldownTimer < attackCooldown) return;
         if (playerMovement != null && !playerMovement.CanAttack()) return;
 
         anim?.SetTrigger("attack");
-        cooldownTimer = 0;
+        cooldownTimer = 0f;
+
+        // ✅ Tell SoundManager to play sound
+        if (SoundManager.Instance != null)
+        {
+            SoundManager.Instance.PlayShoot();
+        }
 
         if (fireballs.Length == 0 || firePoint == null)
         {
-            Debug.LogError("Fireballs array or FirePoint not assigned!");
+            Debug.LogError("Fireballs or FirePoint not assigned!");
             return;
         }
 
         GameObject fireball = fireballs[FindFireball()];
         fireball.transform.position = firePoint.position;
+        fireball.SetActive(true);
 
         Projectile proj = fireball.GetComponent<Projectile>();
         if (proj == null)
         {
-            Debug.LogError("Projectile component missing on fireball prefab!");
+            Debug.LogError("Projectile component missing!");
             return;
         }
 
