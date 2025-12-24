@@ -91,7 +91,7 @@ public class WinMenuController : MonoBehaviour
                 break;
 
             case 2: // QUIT
-                Application.Quit();
+                SceneManager.LoadScene("CreditScene");
                 break;
         }
     }
