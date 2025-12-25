@@ -17,26 +17,29 @@ public class PlayerMovement : MonoBehaviour
     }
 
     private void Update()
+{
+    if (!canMove)
     {
-        if (!canMove) return; // Stop movement while typing
-
-        float horizontalInput = Input.GetAxis("Horizontal");
-        body.velocity = new Vector2(horizontalInput * speed, body.velocity.y);
-
-        // Flip player based on direction
-        if (horizontalInput > 0.01f)
-            transform.localScale = Vector3.one;
-        else if (horizontalInput < -0.01f)
-            transform.localScale = new Vector3(-1, 1, 1);
-
-        // Jump
-        if(Input.GetKey(KeyCode.Space) && grounded)
-            Jump();
-
-        // Animation
-        animation.SetBool("walk", horizontalInput != 0);
-        animation.SetBool("grounded", grounded);
+        body.velocity = Vector2.zero;
+        animation.SetBool("walk", false);
+        return;
     }
+
+    float horizontalInput = Input.GetAxis("Horizontal");
+    body.velocity = new Vector2(horizontalInput * speed, body.velocity.y);
+
+    if (horizontalInput > 0.01f)
+        transform.localScale = Vector3.one;
+    else if (horizontalInput < -0.01f)
+        transform.localScale = new Vector3(-1, 1, 1);
+
+    if (Input.GetKey(KeyCode.Space) && grounded)
+        Jump();
+
+    animation.SetBool("walk", horizontalInput != 0);
+    animation.SetBool("grounded", grounded);
+}
+
 
     private void Jump()
     {
